@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course List</title>
+    <style>
+        /* Your CSS styles */
+    </style>
+</head>
+<body>
+    <h1>Available Courses</h1>
+    <div>
+        <input type="text" id="search" placeholder="Search courses...">
+        <select id="sort">
+            <option value="name">Sort by Name</option>
+            <option value="level">Sort by Level</option>
+        </select>
+    </div>
+    <ul id="course-list"></ul>
+    <div class="pagination" id="pagination"></div>
+
+    <h2>Sign Up for a Course</h2>
+    <form id="signup-form">
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="text" id="course" placeholder="Course" required>
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const courseList = document.getElementById('course-list');
+            const searchInput = document.getElementById('search');
+            const sortSelect = document.getElementById('sort');
+            const paginationDiv = document.getElementById('pagination');
+
+            let currentPage = 1;
+            const coursesPerPage = 2; 
+            let currentData = [];
+            let filteredData = [];
+
+            fetch("User.json")
+                .then(User => User.json())
+                .then(data => {
+                    currentData = data;
+                    filteredData = currentData;
+                    displayCourses(filteredData, currentPage);
+
+                    // Search functionality
+                    searchInput.addEventListener('input', () => {
+                        currentPage = 1;
+                        filterAndDisplayCourses();
+                    });
+
+                    // Sort functionality
+                    sortSelect.addEventListener('change', () => {
+                        currentPage = 1;
+                        filterAndDisplayCourses();
+                    });
+                });
+
+            function filterAndDisplayCourses() {
+                filteredData = currentData.filter(course =>
+                    course.course_name.toLowerCase().includes(searchInput.value.toLowerCase())
+                );
+
+                if (sortSelect.value === 'name') {
+                    filteredData.sort((a, b) => a.course_name.localeCompare(b.course_name));
+                } else if (sortSelect.value === 'level') {
+                    filteredData.sort((a, b) => a.level.localeCompare(b.level));
+                }
+
+                displayCourses(filteredData, currentPage);
+            }
+
+            function displayCourses(courses, page) {
+                courseList.innerHTML = '';
+                const startIndex = (page - 1) * coursesPerPage;
+                const endIndex = page * coursesPerPage;
+                const paginatedCourses = courses.slice(startIndex, endIndex);
+
+                paginatedCourses.forEach(course => {
+                    const li = document.createElement('li');
+                    li.textContent = `${course.course_name} - ${course.instructor} - ${course.duration} - ${course.level}`;
+                    courseList.appendChild(li);
+                });
+
+                displayPagination(courses.length, page);
+            }
+
+            function displayPagination(totalCourses, page) {
+                paginationDiv.innerHTML = '';
+                const totalPages = Math.ceil(totalCourses / coursesPerPage);
+
+                for (let i = 1; i <= totalPages; i++) {
+                    const button = document.createElement('button');
+                    button.textContent = i;
+                    button.classList.add('page-button');
+                    if (i === page) {
+                        button.classList.add('active-page');
+                    }
+                    button.addEventListener('click', () => {
+                        currentPage = i;
+                        displayCourses(filteredData, currentPage);
+                    });
+                    paginationDiv.appendChild(button);
+                }
+            }
+
+            // Handle form submission
+            document.getElementById('signup-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const course = document.getElementById('course').value;
+
+                if (name && email && course) {
+                    alert('Thank you for signing up!');
+                } else {
+                    alert('Please fill out all fields.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

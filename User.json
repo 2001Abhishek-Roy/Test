@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "course_name": "Introduction to Programming",
+    "instructor": "John Doe",
+    "duration": "4 weeks",
+    "level": "Beginner"
+  },
+  {
+    "id": 2,
+    "course_name": "Web Development Basics",
+    "instructor": "Jane Smith",
+    "duration": "6 weeks",
+    "level": "Beginner"
+  },
+  {
+    "id": 3,
+    "course_name": "Advanced JavaScript",
+    "instructor": "James Brown",
+    "duration": "8 weeks",
+    "level": "Advanced"
+  },
+  {
+    "id": 4,
+    "course_name": "Data Structures & Algorithms",
+    "instructor": "Emily White",
+    "duration": "10 weeks",
+    "level": "Intermediate"
+  },
+  {
+    "id": 5,
+    "course_name": "Machine Learning",
+    "instructor": "Michael Green",
+    "duration": "12 weeks",
+    "level": "Advanced"
+  },
+  {
+    "id": 6,
+    "course_name": "Database Management",
+    "instructor": "Sarah Black",
+    "duration": "5 weeks",
+    "level": "Intermediate"
+  }
+]
